@@ -41,7 +41,9 @@ int i_sqrt_ffs(int x)
     return c;
 }
 
-int main(void)
+
+
+int main()
 {
-    printf("%d\n", i_sqrt_ffs(126));
+    return 0;
 }
