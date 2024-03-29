@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdint.h>
 
 /* example division and reminder using bitwise without d0,d1,d2 */
@@ -47,7 +48,10 @@ void _mod5(uint32_t in, uint32_t *mod)
     *mod = in;
 }
 
-/* we can fast calculate mod 15 */
+/**
+ *  we can fast calculate mod 15, so we can calculate a mod 5 by
+ *  a mod 5 = (a mod 15) mod 5
+ */
 void mod5(uint32_t in, uint32_t *mod)
 {
     in = (in >> 16) + (in & 0xFFFF); /* sum 2^16 = 65536 base digits */
@@ -64,10 +68,30 @@ void mod5(uint32_t in, uint32_t *mod)
     *mod = in;
 }
 
+/**
+ *  a mod 9 = (a mod 63) mod 9
+ * 
+*/
+void mod9(uint32_t in, uint32_t *mod)
+{
+    in = (in >> 24) + (in & 0xFFFFFF); /* mod 2^24 - 1 */
+    in = (in >> 12) + (in & 0xFFF);
+    in = (in >> 6)  + (in & 0x3F);
+    /* mod 63 */
+
+    while (in > 8)
+        in -= 9;
+    *mod = in;
+}
+
 int main(void)
 {
-    uint32_t r, q;
-    div10(123321, &q, &r);
-    mod5(123321, &r);
+    /* Assume ASLR */
+    srand((uintptr_t)&main);
+
+    uint32_t r, q, n = (uint32_t)rand();
+    div10(n, &q, &r);
+    mod9(n, &r);
     printf("r: %u\n", r);
+    printf("%u\n", n % 9);
 }
