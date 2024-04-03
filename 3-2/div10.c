@@ -93,5 +93,5 @@ int main(void)
     div10(n, &q, &r);
     mod9(n, &r);
     printf("r: %u\n", r);
-    printf("%u\n", n % 9);
+    printf("%d\n", ilog32(64));
 }
